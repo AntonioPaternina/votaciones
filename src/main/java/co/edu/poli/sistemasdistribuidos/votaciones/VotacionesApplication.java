@@ -1,4 +1,4 @@
-package co.edu.poli.sistemasdistribuidos;
+package co.edu.poli.sistemasdistribuidos.votaciones;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

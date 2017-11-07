@@ -1,4 +1,4 @@
-package co.edu.poli.sistemasdistribuidos;
+package co.edu.poli.sistemasdistribuidos.votaciones;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

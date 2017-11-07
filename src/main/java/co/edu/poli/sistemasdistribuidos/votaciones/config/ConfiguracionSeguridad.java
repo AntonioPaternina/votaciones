@@ -1,4 +1,4 @@
-package co.edu.poli.sistemasdistribuidos.config;
+package co.edu.poli.sistemasdistribuidos.votaciones.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,6 +35,10 @@ public class ConfiguracionSeguridad extends WebSecurityConfigurerAdapter impleme
                 .and()
 
                 .logout().permitAll()
+
+                .and()
+
+                .headers().frameOptions().disable() // para poder ver h2-console
 
                 .and()
 
