@@ -18,4 +18,11 @@ public class PermisoEntity extends BaseEntity implements Serializable {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    @Override
+    public String toString() {
+        return "PermisoEntity{" +
+                "nombre='" + nombre + '\'' +
+                '}';
+    }
 }

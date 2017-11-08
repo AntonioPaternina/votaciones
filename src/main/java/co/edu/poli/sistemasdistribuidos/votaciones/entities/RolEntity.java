@@ -7,6 +7,9 @@ import java.util.Set;
 @Entity
 @Table(name = "ROL")
 public class RolEntity extends BaseEntity implements Serializable {
+
+    public static final String ADMIN = "ROL_ADMIN";
+
     @Column(name = "NOMBRE")
     private String nombre;
     @ManyToMany
@@ -30,5 +33,13 @@ public class RolEntity extends BaseEntity implements Serializable {
 
     public void setPermisos(Set<PermisoEntity> permisos) {
         this.permisos = permisos;
+    }
+
+    @Override
+    public String toString() {
+        return "RolEntity{" +
+                "nombre='" + nombre + '\'' +
+                ", permisos=" + permisos +
+                '}';
     }
 }

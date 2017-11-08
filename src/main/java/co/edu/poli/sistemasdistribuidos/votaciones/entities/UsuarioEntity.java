@@ -122,4 +122,19 @@ public class UsuarioEntity extends BaseEntity implements Serializable {
     public void setVotos(Set<VotoEntity> votos) {
         this.votos = votos;
     }
+
+    @Override
+    public String toString() {
+        return "UsuarioEntity{" +
+                "username='" + username + '\'' +
+                ", primerNombre='" + primerNombre + '\'' +
+                ", segundoNombre='" + segundoNombre + '\'' +
+                ", primerApellido='" + primerApellido + '\'' +
+                ", segundoApellido='" + segundoApellido + '\'' +
+                ", correo='" + correo + '\'' +
+                ", fechaDeNacimiento=" + fechaDeNacimiento +
+                ", activo=" + activo +
+                ", roles=" + roles +
+                '}';
+    }
 }
