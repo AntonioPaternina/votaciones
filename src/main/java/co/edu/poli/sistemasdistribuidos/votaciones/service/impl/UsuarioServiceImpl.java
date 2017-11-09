@@ -8,8 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
+@Transactional
 public class UsuarioServiceImpl implements UsuarioService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UsuarioServiceImpl.class);
@@ -73,5 +77,21 @@ public class UsuarioServiceImpl implements UsuarioService {
             LOGGER.error("Error consultando el conteo de usuarios para el usuario=" + username, e);
         }
         return existe;
+    }
+
+    @Override
+    public List<UsuarioEntity> buscarTodos() {
+        List<UsuarioEntity> usuarios = null;
+        try {
+            usuarios = usuarioRepository.findAll();
+        } catch (Exception e) {
+            LOGGER.error("Error buscando todos los usuarios", e);
+        }
+        return usuarios;
+    }
+
+    @Override
+    public long conteoDeUsuarios() {
+        return usuarioRepository.count();
     }
 }

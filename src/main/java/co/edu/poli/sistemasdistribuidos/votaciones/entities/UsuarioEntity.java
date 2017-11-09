@@ -1,5 +1,7 @@
 package co.edu.poli.sistemasdistribuidos.votaciones.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -11,6 +13,7 @@ public class UsuarioEntity extends BaseEntity implements Serializable {
     @Column(name = "USERNAME")
     private String username;
     @Column(name = "PASSWORD")
+    @JsonIgnore
     private String password;
     @Column(name = "PRIMER_NOMBRE")
     private String primerNombre;
@@ -33,6 +36,7 @@ public class UsuarioEntity extends BaseEntity implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "ID_ROL", referencedColumnName = "ID"))
     private Set<RolEntity> roles;
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<VotoEntity> votos;
 
     public String getUsername() {

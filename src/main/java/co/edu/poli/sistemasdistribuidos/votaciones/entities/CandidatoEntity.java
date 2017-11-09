@@ -24,9 +24,8 @@ public class CandidatoEntity extends BaseEntity implements Serializable {
     @Column(name = "BIOGRAFIA")
     private String biografia;
 
-    @Lob
     @Column(name = "FOTO")
-    private byte[] foto;
+    private String foto;
 
     public UsuarioEntity getUsuario() {
         return usuario;
@@ -68,11 +67,11 @@ public class CandidatoEntity extends BaseEntity implements Serializable {
         this.biografia = biografia;
     }
 
-    public byte[] getFoto() {
+    public String getFoto() {
         return foto;
     }
 
-    public void setFoto(byte[] foto) {
+    public void setFoto(String foto) {
         this.foto = foto;
     }
 }

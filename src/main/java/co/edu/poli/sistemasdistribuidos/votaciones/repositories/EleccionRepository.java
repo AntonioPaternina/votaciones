@@ -1,0 +1,9 @@
+package co.edu.poli.sistemasdistribuidos.votaciones.repositories;
+
+import co.edu.poli.sistemasdistribuidos.votaciones.entities.EleccionEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface EleccionRepository extends JpaRepository<EleccionEntity, Long> {
+}

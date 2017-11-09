@@ -9,6 +9,8 @@ import java.util.Set;
 public class RolEntity extends BaseEntity implements Serializable {
 
     public static final String ADMIN = "ROL_ADMIN";
+    public static final String ELECTOR = "ROL_ELECTOR";
+    public static final String CANDIDATO = "ROL_CANDIDATO";
 
     @Column(name = "NOMBRE")
     private String nombre;
