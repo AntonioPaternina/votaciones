@@ -1,5 +1,7 @@
 package co.edu.poli.sistemasdistribuidos.votaciones.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -19,6 +21,7 @@ public class CandidatoEntity extends BaseEntity implements Serializable {
     private Set<VotoEntity> votos;
 
     @ManyToMany(mappedBy = "candidatos")
+    @JsonIgnore
     private Set<EleccionEntity> elecciones;
 
     @Column(name = "BIOGRAFIA")

@@ -1,13 +1,8 @@
 package co.edu.poli.sistemasdistribuidos.votaciones.initializer;
 
-import co.edu.poli.sistemasdistribuidos.votaciones.entities.CandidatoEntity;
-import co.edu.poli.sistemasdistribuidos.votaciones.entities.PartidoEntity;
-import co.edu.poli.sistemasdistribuidos.votaciones.entities.RolEntity;
-import co.edu.poli.sistemasdistribuidos.votaciones.entities.UsuarioEntity;
-import co.edu.poli.sistemasdistribuidos.votaciones.service.CandidatoService;
-import co.edu.poli.sistemasdistribuidos.votaciones.service.PartidoService;
-import co.edu.poli.sistemasdistribuidos.votaciones.service.RolService;
-import co.edu.poli.sistemasdistribuidos.votaciones.service.UsuarioService;
+import co.edu.poli.sistemasdistribuidos.votaciones.entities.*;
+import co.edu.poli.sistemasdistribuidos.votaciones.service.*;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +12,10 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 @Transactional
@@ -29,6 +27,7 @@ public class DatosPorDefecto implements ApplicationListener<ContextRefreshedEven
     public static final String PARTIDO_CONSERVADOR = "Conservador";
     public static final String PARTIDO_POLO_DEMOCRATICO = "Polo Democrático";
     public static final String PARTIDO_VERDE = "Partido Verde";
+    public static final String FORMATO_TIMESTAMP = "yyyy.MM.dd.HH.mm.ss";
 
     @Value("${votaciones.inicializar-datos-por-defecto}")
     private boolean inicializarDatosPorDefecto;
@@ -70,8 +69,11 @@ public class DatosPorDefecto implements ApplicationListener<ContextRefreshedEven
     @Autowired
     private CandidatoService candidatoService;
 
-    private List<CandidatoEntity> candidatosEleccion1 = new ArrayList<>();
-    private List<CandidatoEntity> candidatosEleccion2 = new ArrayList<>();
+    @Autowired
+    private EleccionService eleccionService;
+
+    private Set<CandidatoEntity> candidatosEleccion1 = new HashSet<>();
+    private Set<CandidatoEntity> candidatosEleccion2 = new HashSet<>();
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
@@ -87,8 +89,32 @@ public class DatosPorDefecto implements ApplicationListener<ContextRefreshedEven
         }
     }
 
-    private void crearElecciones() {
+    private void crearElecciones() throws ParseException {
+        EleccionEntity eleccionPresidencial = new EleccionEntity();
+        eleccionPresidencial.setCandidatos(candidatosEleccion1);
+        eleccionPresidencial.setNombre("Elecciones Presidenciales 2018");
+        eleccionPresidencial.setDescripcion("Elecciones Presidenciales 2018");
+        eleccionPresidencial.setInicioEleccion(parseDate("2018.05.24.08.00.00"));
+        eleccionPresidencial.setFinEleccion(parseDate("2018.05.24.16.00.00"));
+        eleccionPresidencial.setInicioInscripcion(parseDate("2017.10.01.08.00.00"));
+        eleccionPresidencial.setFinInscripcion(parseDate("2017.12.15.08.00.00"));
 
+        eleccionService.guardar(eleccionPresidencial);
+
+        EleccionEntity consultaLiberal = new EleccionEntity();
+        consultaLiberal.setCandidatos(candidatosEleccion1);
+        consultaLiberal.setNombre("Consulta Liberal");
+        consultaLiberal.setDescripcion("Consulta Liberal");
+        consultaLiberal.setInicioEleccion(parseDate("2017.11.19.08.00.00"));
+        consultaLiberal.setFinEleccion(parseDate("2017.11.19.16.00.00"));
+        consultaLiberal.setInicioInscripcion(parseDate("2017.10.01.08.00.00"));
+        consultaLiberal.setFinInscripcion(parseDate("2017.11.11.08.00.00"));
+
+        eleccionService.guardar(consultaLiberal);
+    }
+
+    private Date parseDate(String str) throws ParseException {
+        return DateUtils.parseDate(str, FORMATO_TIMESTAMP);
     }
 
     private void crearPartidos() {
@@ -122,7 +148,8 @@ public class DatosPorDefecto implements ApplicationListener<ContextRefreshedEven
     private void crearUsuarios() {
         crearUsuarioAdmin();
         crearUsuariosElectores();
-        crearUsuariosCandidatos();
+        crearUsuariosCandidatosParaEleccion(0);
+        crearUsuariosCandidatosParaEleccion(1);
     }
 
     private void crearUsuarioAdmin() {
@@ -159,7 +186,7 @@ public class DatosPorDefecto implements ApplicationListener<ContextRefreshedEven
         }
     }
 
-    private void crearUsuariosCandidatos() {
+    private void crearUsuariosCandidatosParaEleccion(int numeroEleccion) {
         String[] partidos = new String[]{PARTIDO_LIBERAL, PARTIDO_CONSERVADOR, PARTIDO_POLO_DEMOCRATICO, PARTIDO_VERDE};
         for (int i = 0; i < 4; i++) {
             UsuarioEntity usuario = new UsuarioEntity();
@@ -175,19 +202,34 @@ public class DatosPorDefecto implements ApplicationListener<ContextRefreshedEven
             usuario.setActivo(true);
 
             usuario = crearUsuario(usuario, new String[]{RolEntity.ELECTOR, RolEntity.CANDIDATO});
-            crearCandidato(usuario, "https://image.freepik.com/vector-gratis/eleccion-de-candidato_23-2147503010.jpg",
-                           "Soy un buen candidato, voten por mi, soy el " + i, partidos[i]);
+            CandidatoEntity candidato = crearCandidato(usuario,
+                                                       "https://image.freepik" +
+                                                               ".com/vector-gratis/eleccion-de-candidato_23-2147503010.jpg",
+                                                       "Soy un buen candidato, voten por mi, soy el " + i, partidos[i]);
+
+            switch (numeroEleccion) {
+                case 0:
+                    candidatosEleccion1.add(candidato);
+                    break;
+                case 1:
+                    candidatosEleccion2.add(candidato);
+                    break;
+                default:
+                    break;
+            }
+
         }
     }
 
-    private void crearCandidato(UsuarioEntity usuario, String urlFoto, String biografia, String nombrePartido) {
+    private CandidatoEntity crearCandidato(UsuarioEntity usuario, String urlFoto, String biografia,
+                                           String nombrePartido) {
         CandidatoEntity candidato = new CandidatoEntity();
         candidato.setUsuario(usuario);
         candidato.setBiografia(biografia);
         candidato.setFoto(urlFoto);
         candidato.setPartido(partidoService.buscarPorNombre(nombrePartido));
 
-        candidatoService.guardar(candidato);
+        return candidatoService.guardar(candidato);
     }
 
     private UsuarioEntity crearUsuario(UsuarioEntity usuario, String[] rolesString) {
