@@ -1,5 +1,7 @@
 package co.edu.poli.sistemasdistribuidos.votaciones.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
@@ -27,8 +29,10 @@ public class EleccionEntity extends BaseEntity {
     @JoinTable(name = "ELECCION_CANDIDATO",
             joinColumns = @JoinColumn(name = "ID_ELECCION", referencedColumnName = "ID"),
             inverseJoinColumns = @JoinColumn(name = "ID_CANDIDATO", referencedColumnName = "ID"))
+    @JsonIgnore
     private Set<CandidatoEntity> candidatos;
     @OneToMany(mappedBy = "eleccion", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<VotoEntity> votos;
     @OneToOne
     private EstadisticaEleccionEntity estadistica;

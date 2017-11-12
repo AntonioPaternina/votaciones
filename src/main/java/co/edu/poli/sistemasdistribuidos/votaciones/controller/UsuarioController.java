@@ -5,14 +5,12 @@ import co.edu.poli.sistemasdistribuidos.votaciones.service.UsuarioService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/usuarios")
-public class UsuarioController {
+public class UsuarioController extends BaseController {
     private static Logger LOGGER = LoggerFactory.getLogger(UsuarioController.class);
 
     @Autowired
@@ -22,11 +20,8 @@ public class UsuarioController {
     public UsuarioEntity consultarDatosUsuarioEnSesion() {
         UsuarioEntity usuario = null;
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication != null) {
-                String username = authentication.getName();
-                usuario = usuarioService.buscarPorUsername(username);
-            }
+            String username = getUsernameEnSesion();
+            usuario = usuarioService.buscarPorUsername(username);
         } catch (Exception e) {
             LOGGER.error("Error consultando los datos del usuario en sesión.", e);
         }

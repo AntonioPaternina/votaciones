@@ -18,6 +18,7 @@ public class CandidatoEntity extends BaseEntity implements Serializable {
     private PartidoEntity partido;
 
     @OneToMany(mappedBy = "candidato", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<VotoEntity> votos;
 
     @ManyToMany(mappedBy = "candidatos")
