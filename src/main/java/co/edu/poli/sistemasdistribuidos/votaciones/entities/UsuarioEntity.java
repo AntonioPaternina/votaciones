@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -38,6 +39,13 @@ public class UsuarioEntity extends BaseEntity implements Serializable {
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<VotoEntity> votos;
+
+    public void agregarRol(RolEntity rol) {
+        if (this.roles == null) {
+            this.roles = new HashSet<>();
+        }
+        this.roles.add(rol);
+    }
 
     public String getUsername() {
         return username;

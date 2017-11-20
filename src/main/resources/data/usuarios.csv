@@ -1,0 +1,11 @@
+id,username,password,primer nombre, segundo nombre, primer apellido, segundo apellido, correo, fecha de nacimiento, activo,roles
+1,rperez,test,Rosa,María,Perez,Gallo,rperez@foo.bar,1956-03-08,true,2
+2,lrodriguez,test,Leidy,Fernanda,Rodriguez,Ramírez,lrodriguez@foo.bar,1957-94-06,true,2
+3,jsantos,test,Juan,Manuel,Santos,Calderón,jsantos@foo.bar,1951-08-10,true,"2,3"
+4,ozuluaga,test,Óscar,Iván,Zuluaga,Escobar,ozuluaga@foo.bar,1959-02-03,true,"2,3"
+5,mramirez,test,Marta,Lucía,Ramírez,Blanco,mramirez@foo.bar,1954-07-04,true,"2,3"
+6,clopez,test,Clara,Eugenia,López,Obregón,cloperz@foo.bar,1950-04-12,true,"2,3"
+7,epenalosa,test,Enrique,Peñalosa,Londoño,,epenalosa@foo.bar,1954-09-30,true,"2,3"
+8,test,test,Alguien,Alguien,Alguien,Alguien,test@foo.bar,1955-06-05,true,"2,3"
+9,test2,test2,Otro,Otro,Otro,Otro,otro@foo.bar,1955-06-05,true,"2,3"
+10,admin,admin,admin,admin,admin,admin,admin@foo.bar,1956-01-01,true,1

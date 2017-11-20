@@ -5,6 +5,9 @@ import co.edu.poli.sistemasdistribuidos.votaciones.entities.PartidoEntity;
 import java.util.List;
 
 public interface PartidoService {
+
+    PartidoEntity buscarPorId(long id);
+
     PartidoEntity guardar(PartidoEntity partido);
 
     List<PartidoEntity> consultar();

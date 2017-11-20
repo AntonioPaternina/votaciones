@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -36,6 +37,13 @@ public class EleccionEntity extends BaseEntity {
     private Set<VotoEntity> votos;
     @OneToOne
     private EstadisticaEleccionEntity estadistica;
+
+    public void agregarCandidato(CandidatoEntity candidato) {
+        if (this.candidatos == null) {
+            this.candidatos = new HashSet<>();
+        }
+        this.candidatos.add(candidato);
+    }
 
     public String getNombre() {
         return nombre;

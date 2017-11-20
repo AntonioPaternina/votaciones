@@ -21,6 +21,17 @@ public class PartidoServiceImpl implements PartidoService {
     private PartidoRepository partidoRepository;
 
     @Override
+    public PartidoEntity buscarPorId(long id) {
+        PartidoEntity partido = null;
+        try {
+            partido = partidoRepository.findOne(id);
+        } catch (Exception e) {
+            LOGGER.error("Error buscando partido con id=" + id);
+        }
+        return partido;
+    }
+
+    @Override
     public PartidoEntity guardar(PartidoEntity partido) {
         PartidoEntity partidoGuardado = null;
         try {

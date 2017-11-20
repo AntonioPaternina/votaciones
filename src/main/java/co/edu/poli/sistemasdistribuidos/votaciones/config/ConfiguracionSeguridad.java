@@ -31,10 +31,9 @@ public class ConfiguracionSeguridad extends WebSecurityConfigurerAdapter impleme
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/login.html").anonymous()
-                .antMatchers("/js/**", "/css/**").anonymous()
-                .antMatchers("/**").anonymous()
-                //.anyRequest().authenticated()
+                .antMatchers("/login.html").permitAll()
+                .antMatchers("/js/**", "/css/**").permitAll()
+                .anyRequest().authenticated()
 
                 .and()
 

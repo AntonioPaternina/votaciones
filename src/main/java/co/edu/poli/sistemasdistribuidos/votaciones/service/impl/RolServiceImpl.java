@@ -7,14 +7,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class RolServiceImpl implements RolService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RolServiceImpl.class);
 
     @Autowired
     private RolRepository rolRepository;
+
+    @Override
+    public RolEntity buscarPorId(long id) {
+        RolEntity rol = null;
+        try {
+            rol = rolRepository.findOne(id);
+        } catch (Exception e) {
+            LOGGER.error("Error buscando el rol por id=" + id);
+        }
+        return rol;
+    }
 
     @Override
     public RolEntity guardar(RolEntity rol) {
