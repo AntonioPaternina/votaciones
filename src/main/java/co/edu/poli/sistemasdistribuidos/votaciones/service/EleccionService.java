@@ -1,6 +1,7 @@
 package co.edu.poli.sistemasdistribuidos.votaciones.service;
 
 import co.edu.poli.sistemasdistribuidos.votaciones.beans.EleccionBean;
+import co.edu.poli.sistemasdistribuidos.votaciones.entities.CandidatoEntity;
 import co.edu.poli.sistemasdistribuidos.votaciones.entities.EleccionEntity;
 import co.edu.poli.sistemasdistribuidos.votaciones.entities.UsuarioEntity;
 
@@ -15,5 +16,9 @@ public interface EleccionService {
     List<EleccionBean> consultarEleccionesDelUsuario(UsuarioEntity usuarioEntity);
 
     boolean usuarioHaVotadoEnEleccion(EleccionEntity eleccion, UsuarioEntity usuario);
+
+    CandidatoEntity calcularGanadorEleccion(EleccionEntity eleccion);
+
+    long obtenerConteoDeVotosEleccion(EleccionEntity eleccionEntity);
 
 }

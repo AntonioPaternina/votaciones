@@ -17,10 +17,6 @@ public class CandidatoEntity extends BaseEntity implements Serializable {
     @JoinColumn(name = "ID_PARTIDO")
     private PartidoEntity partido;
 
-    @OneToMany(mappedBy = "candidato", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private Set<VotoEntity> votos;
-
     @ManyToMany(mappedBy = "candidatos")
     @JsonIgnore
     private Set<EleccionEntity> elecciones;
@@ -46,14 +42,6 @@ public class CandidatoEntity extends BaseEntity implements Serializable {
 
     public void setPartido(PartidoEntity partido) {
         this.partido = partido;
-    }
-
-    public Set<VotoEntity> getVotos() {
-        return votos;
-    }
-
-    public void setVotos(Set<VotoEntity> votos) {
-        this.votos = votos;
     }
 
     public Set<EleccionEntity> getElecciones() {

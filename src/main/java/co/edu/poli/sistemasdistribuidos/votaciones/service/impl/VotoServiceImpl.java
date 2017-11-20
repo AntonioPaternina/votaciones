@@ -34,6 +34,27 @@ public class VotoServiceImpl extends BaseServiceImpl implements VotoService {
     private VotoRepository votoRepository;
 
     @Override
+    public VotoEntity guardarVoto(long idUsuario, long idEleccion, long idCandidato) {
+        VotoEntity voto = null;
+        try {
+            VotoEntity nuevoVoto = new VotoEntity();
+
+            CandidatoEntity candidato = candidatoService.buscarPorId(idCandidato);
+            EleccionEntity eleccion = eleccionService.buscarPorId(idEleccion);
+            UsuarioEntity elector = usuarioService.buscarPorId(idUsuario);
+
+            nuevoVoto.setCandidato(candidato);
+            nuevoVoto.setEleccion(eleccion);
+            nuevoVoto.setUsuario(elector);
+
+            voto = votoRepository.saveAndFlush(nuevoVoto);
+        } catch (Exception e) {
+            LOGGER.error("Error creando voto", e);
+        }
+        return voto;
+    }
+
+    @Override
     public VotoEntity votar(long idEleccion, long idCandidato) {
         VotoEntity voto = null;
         try {

@@ -58,4 +58,15 @@ public class CandidatoServiceImpl implements CandidatoService {
         }
         return candidatos;
     }
+
+    @Override
+    public long getConteoVotosDelCandidatoParaEleccion(EleccionEntity eleccion, CandidatoEntity candidato) {
+        long conteo = 0;
+        try {
+            conteo = candidatoRepository.obtenerConteoVotosDelCandidatoParaEleccion(candidato, eleccion);
+        } catch (Exception e) {
+            LOGGER.error("Error consultando el conteo de votos para el candidato", e);
+        }
+        return conteo;
+    }
 }

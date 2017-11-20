@@ -1,9 +1,11 @@
 package co.edu.poli.sistemasdistribuidos.votaciones.service.impl;
 
 import co.edu.poli.sistemasdistribuidos.votaciones.beans.EleccionBean;
+import co.edu.poli.sistemasdistribuidos.votaciones.entities.CandidatoEntity;
 import co.edu.poli.sistemasdistribuidos.votaciones.entities.EleccionEntity;
 import co.edu.poli.sistemasdistribuidos.votaciones.entities.UsuarioEntity;
 import co.edu.poli.sistemasdistribuidos.votaciones.repositories.EleccionRepository;
+import co.edu.poli.sistemasdistribuidos.votaciones.service.CandidatoService;
 import co.edu.poli.sistemasdistribuidos.votaciones.service.EleccionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +25,9 @@ public class EleccionServiceImpl implements EleccionService {
 
     @Autowired
     private EleccionRepository eleccionRepository;
+
+    @Autowired
+    private CandidatoService candidatoService;
 
     @Override
     public EleccionEntity buscarPorId(long idEleccion) {
@@ -73,5 +79,33 @@ public class EleccionServiceImpl implements EleccionService {
             LOGGER.error("Ocurrió un error consultando si el usuario ha votado en la elección", e);
         }
         return haVotado;
+    }
+
+    @Override
+    public CandidatoEntity calcularGanadorEleccion(EleccionEntity eleccion) {
+        CandidatoEntity ganador = null;
+        try {
+            List<BigInteger> idsGanadores = eleccionRepository.calcularGanadoresEleccion(eleccion.getId());
+            if (idsGanadores.isEmpty() || idsGanadores.size() > 1) {
+                // empate o no hay votos se retorna nulo
+                ganador = null;
+            } else {
+                ganador = candidatoService.buscarPorId(idsGanadores.get(0).longValue());
+            }
+        } catch (Exception e) {
+            LOGGER.error("Ocurrió un error calculando el ganador de la elección", e);
+        }
+        return ganador;
+    }
+
+    @Override
+    public long obtenerConteoDeVotosEleccion(EleccionEntity eleccionEntity) {
+        long conteo = 0;
+        try {
+            conteo = eleccionRepository.obtenerConteoDeVotosPorEleccion(eleccionEntity);
+        } catch (Exception e) {
+            LOGGER.error("Ocurrió un error generando el conteo de votos", e);
+        }
+        return conteo;
     }
 }

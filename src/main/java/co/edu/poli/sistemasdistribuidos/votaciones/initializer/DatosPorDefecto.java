@@ -28,6 +28,8 @@ public class DatosPorDefecto implements ApplicationListener<ContextRefreshedEven
     public static final String FORMATO_TIMESTAMP = "yyyy-MM-dd'T'HHmm";
     public static final String FORMATO_DATE = "yyyy-MM-dd";
 
+    private long contadorVotante = 0;
+
     @Value("${votaciones.inicializar-datos-por-defecto}")
     private boolean inicializarDatosPorDefecto;
 
@@ -47,6 +49,12 @@ public class DatosPorDefecto implements ApplicationListener<ContextRefreshedEven
     private EleccionService eleccionService;
 
     @Autowired
+    private VotoService votoService;
+
+    @Autowired
+    private EstadisticaEleccionService estadisticaEleccionService;
+
+    @Autowired
     private ObjectParser objectParser;
 
     @Override
@@ -58,10 +66,58 @@ public class DatosPorDefecto implements ApplicationListener<ContextRefreshedEven
                 crearUsuarios();
                 crearCandidatos();
                 crearElecciones();
+                ejecutarElecciones();
             }
         } catch (Exception e) {
             LOGGER.error("Ha ocurrido un error en la inicialización de datos por defecto", e);
         }
+    }
+
+    private void ejecutarElecciones() throws ParseException {
+        crearVotos();
+        generarEstadisticas();
+    }
+
+    private void generarEstadisticas() {
+        EleccionEntity eleccion = eleccionService.buscarPorId(2);
+        estadisticaEleccionService.generarEstadistica(eleccion);
+
+        eleccion = eleccionService.buscarPorId(3);
+        estadisticaEleccionService.generarEstadistica(eleccion);
+    }
+
+    private void crearVotos() throws ParseException {
+        List<String[]> votos = objectParser.obtenerListaCadenas("data/votos.csv");
+        for (String[] conjuntoVotos : votos) {
+            crearConjuntoVoto(conjuntoVotos);
+        }
+    }
+
+    private void crearConjuntoVoto(String[] voto) throws ParseException {
+        String rawIdEleccion = voto[0];
+        EleccionEntity eleccion = eleccionService.buscarPorId(parseLong(rawIdEleccion));
+
+        String rawIdCandidato = voto[1];
+        CandidatoEntity candidato = candidatoService.buscarPorId(parseLong(rawIdCandidato));
+
+        long votos = parseLong(voto[2]);
+        UsuarioEntity elector;
+        for (long i = votos; i > 0; i--) {
+            elector = crearElectorDePrueba();
+
+            VotoEntity votoEntity = new VotoEntity();
+            votoEntity.setUsuario(elector);
+            votoEntity.setEleccion(eleccion);
+            votoEntity.setCandidato(candidato);
+
+            votoService.guardarVoto(elector.getId(), parseLong(rawIdEleccion), parseLong(rawIdCandidato));
+        }
+    }
+
+    private UsuarioEntity crearElectorDePrueba() throws ParseException {
+        return crearUsuario(
+                new String[]{"0", "test" + contadorVotante++, "test", "test", "test", "test", "test", "test",
+                        "1956-01-01", "true", "2"});
     }
 
     private void crearCandidatos() {
@@ -163,7 +219,7 @@ public class DatosPorDefecto implements ApplicationListener<ContextRefreshedEven
         }
     }
 
-    private void crearUsuario(String[] rawUsuario) throws ParseException {
+    private UsuarioEntity crearUsuario(String[] rawUsuario) throws ParseException {
         UsuarioEntity usuario = new UsuarioEntity();
         usuario.setId(parseLong(rawUsuario[0]));
         usuario.setUsername(rawUsuario[1]);
@@ -185,7 +241,7 @@ public class DatosPorDefecto implements ApplicationListener<ContextRefreshedEven
             }
         }
 
-        usuarioService.guardar(usuario);
+        return usuarioService.guardar(usuario);
     }
 
     private boolean isBaseDeDatosInicializada() {
