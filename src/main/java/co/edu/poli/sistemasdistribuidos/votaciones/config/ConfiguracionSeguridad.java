@@ -33,7 +33,8 @@ public class ConfiguracionSeguridad extends WebSecurityConfigurerAdapter impleme
                 .authorizeRequests()
                 .antMatchers("/login.html").anonymous()
                 .antMatchers("/js/**", "/css/**").anonymous()
-                .anyRequest().authenticated()
+                .antMatchers("/**").anonymous()
+                //.anyRequest().authenticated()
 
                 .and()
 
