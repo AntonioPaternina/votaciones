@@ -1,0 +1,114 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Resultados Elección</title>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/utilidades.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<style>
+
+</style>
+<body>
+<div class="resultados_eleccion">
+    <h1 id="titulo"></h1>
+    <h2 id="subtitulo"></h2>
+    <div id="piechart" style="width: 900px; height: 500px;"></div>
+</div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function () {
+        consultarDatos();
+    });
+
+    function consultarDatos() {
+        var idEleccion = getUrlParameter("idEleccion");
+        if (idEleccion) {
+            var modelo = [['Nombre Candidato', 'No. de Votos']];
+            $.ajax({
+                url: "/estadisticas/grafica-resumen-eleccion?idEleccion=" + idEleccion,
+                method: "GET",
+                success: function (data) {
+                    ajustarTitulo(data);
+
+                    var candidatos = data.candidatos;
+                    if (candidatos && candidatos.length > 0 && data.estadisticaEleccion.conteoVotos > 0) {
+                        for (var i = 0; i < candidatos.length; i++) {
+                            var candidato = candidatos[i];
+                            var parDeDatos = [armarNombreCompleto(candidato.candidato.usuario), candidato.conteoVotos];
+                            modelo.push(parDeDatos);
+                        }
+
+                        var tituloGrafico = "% de votos (" + data.estadisticaEleccion.conteoVotos + " votos en total)"
+
+                        generarGrafico(modelo, tituloGrafico);
+                    }
+                },
+                error: function () {
+                    alert('Ha ocurrido un error');
+                }
+            });
+        }
+    }
+
+    function armarNombreCompleto(candidato) {
+        return candidato.primerNombre + ' ' + candidato.segundoNombre + ' ' + candidato.primerApellido + ' ' + candidato.segundoApellido;
+    }
+
+    function generarGrafico(data, titulo) {
+        google.charts.load('current', {'packages': ['corechart']});
+        google.charts.setOnLoadCallback(dibujarPieChart);
+
+        function dibujarPieChart() {
+
+            var dataTable = google.visualization.arrayToDataTable(data);
+
+            var options = {
+                title: titulo
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+            chart.draw(dataTable, options);
+        }
+    }
+
+    function ajustarTitulo(data) {
+        var eleccion = data.eleccion;
+
+        var tituloPagina = eleccion.nombre;
+        $('#titulo').html(tituloPagina);
+
+        if (esEleccionTerminada(eleccion)) {
+            var candidatoGanador = armarNombreCompleto(data.estadisticaEleccion.candidatoGanador.usuario);
+            $('#subtitulo').html("El ganador fue " + candidatoGanador);
+        } else if (esEleccionEnCurso(eleccion)) {
+            $('#subtitulo').html("La elección está en curso");
+        } else if (esEleccionFutura(eleccion)) {
+            $('#subtitulo').html("La elección aún no ha comenzado");
+        }
+    }
+
+    function esEleccionEnCurso(eleccion) {
+        var momentoInicio = new Date(eleccion.inicioEleccion);
+        var momentoFin = new Date(eleccion.finEleccion);
+        var ahora = new Date();
+
+        return ahora.getTime() >= momentoInicio.getTime() && ahora.getTime() <= momentoFin.getTime();
+    }
+
+    function esEleccionTerminada(eleccion) {
+        var momentoFin = new Date(eleccion.finEleccion);
+        var ahora = new Date();
+
+        return ahora.getTime() > momentoFin.getTime();
+    }
+
+    function esEleccionFutura(eleccion) {
+        var momentoInicio = new Date(eleccion.inicioEleccion);
+        var ahora = new Date();
+
+        return ahora.getTime() < momentoInicio.getTime();
+    }
+</script>
+</html>

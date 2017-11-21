@@ -1,11 +1,15 @@
 package co.edu.poli.sistemasdistribuidos.votaciones.beans;
 
+import co.edu.poli.sistemasdistribuidos.votaciones.entities.EleccionEntity;
+import co.edu.poli.sistemasdistribuidos.votaciones.entities.EstadisticaEleccionEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class InfoGraficaBean {
-    List<EstadisticaCandidatoBean> candidatos;
-    long totalVotos;
+    private List<EstadisticaCandidatoBean> candidatos;
+    private EleccionEntity eleccion;
+    private EstadisticaEleccionEntity estadisticaEleccion;
 
     public void agregarCandidato(EstadisticaCandidatoBean candidato) {
         if (this.candidatos == null) {
@@ -23,11 +27,20 @@ public class InfoGraficaBean {
         this.candidatos = candidatos;
     }
 
-    public long getTotalVotos() {
-        return totalVotos;
+    public EleccionEntity getEleccion() {
+        return eleccion;
     }
 
-    public void setTotalVotos(long totalVotos) {
-        this.totalVotos = totalVotos;
+    public void setEleccion(EleccionEntity eleccion) {
+        this.eleccion = eleccion;
+    }
+
+    public EstadisticaEleccionEntity getEstadisticaEleccion() {
+        return estadisticaEleccion;
+    }
+
+    public void setEstadisticaEleccion(
+            EstadisticaEleccionEntity estadisticaEleccion) {
+        this.estadisticaEleccion = estadisticaEleccion;
     }
 }

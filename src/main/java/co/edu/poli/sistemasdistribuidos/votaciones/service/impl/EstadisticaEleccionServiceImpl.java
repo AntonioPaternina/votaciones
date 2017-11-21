@@ -54,7 +54,8 @@ public class EstadisticaEleccionServiceImpl implements EstadisticaEleccionServic
                 infoGraficaBean.agregarCandidato(estadisticaCandidatoBean);
             }
 
-            infoGraficaBean.setTotalVotos(conteoVotos);
+            infoGraficaBean.setEleccion(eleccion);
+            infoGraficaBean.setEstadisticaEleccion(nuevaEstadistica);
         } catch (Exception e) {
             LOGGER.error("Error creando las estadisticas de la elección", e);
         }
