@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -60,7 +61,11 @@ public class EleccionServiceImpl implements EleccionService {
             for (EleccionEntity eleccion : eleccionesEntities) {
                 EleccionBean eleccionBean = new EleccionBean();
                 eleccionBean.setEleccion(eleccion);
-                boolean esActiva = !eleccionRepository.usuarioHaVotadoEnEleccion(usuario, eleccion);
+                boolean esActiva = true;
+                esActiva = esActiva && !eleccionRepository.usuarioHaVotadoEnEleccion(usuario, eleccion);
+                Date ahora = new Date();
+                esActiva = esActiva && ahora.after(eleccion.getInicioEleccion());
+                esActiva = esActiva && ahora.before(eleccion.getFinEleccion());
                 eleccionBean.setActiva(esActiva);
                 elecciones.add(eleccionBean);
             }

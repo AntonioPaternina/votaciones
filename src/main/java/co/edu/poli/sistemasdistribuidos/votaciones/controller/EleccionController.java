@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -30,6 +32,12 @@ public class EleccionController extends BaseController {
         try {
             UsuarioEntity usuarioEnSesion = usuarioService.buscarPorUsername(getUsernameEnSesion());
             elecciones = eleccionService.consultarEleccionesDelUsuario(usuarioEnSesion);
+            Collections.sort(elecciones, new Comparator<EleccionBean>() {
+                @Override
+                public int compare(EleccionBean o1, EleccionBean o2) {
+                    return o1.getEleccion().getInicioEleccion().compareTo(o2.getEleccion().getFinEleccion());
+                }
+            });
         } catch (Exception e) {
             LOGGER.error("Error consultando las elecciones", e);
         }

@@ -4,15 +4,74 @@
     <meta charset="UTF-8">
     <title>Votaciones</title>
     <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-    <script src="js/inicio.js"></script>
+    <script type="text/javascript" src="js/moment-with-locales.js"></script>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/utilidades.js"></script>
 </head>
-<body >
-    Aquí va el contenido de la página
-    Aqui va la lista de elecicones activas y puede seleccionar una elccion y lo direcciona al nueva detalle de la eleccion "aparecen los candidatos" y uno elige y voto.
-    otro cambio deiferente
-    <div id="eleccion">
-        
-    </div>
-    
+<style>
+    #home_elecciones_disponbiles {
+        margin: 10px;
+    }
+
+    .home_eleccion {
+        border: 2px solid black;
+        margin: 10px;
+    }
+</style>
+<body>
+<h1>Bienvenido al Sistema de Elecciones</h1>
+<h2>Elecciones disponibles</h2>
+<div id="home_elecciones_disponbiles"></div>
 </body>
+<script type="text/javascript">
+    $(document).ready(function () {
+        moment.locale('es_CO');
+        consultarElecciones();
+    });
+
+    function consultarElecciones() {
+        $.ajax({
+            url: '/eleccion/consultar',
+            method: 'GET',
+            success: function (data) {
+                pintarElecciones(data);
+            },
+            error: function () {
+                alert('Ha ocurrido un error');
+            }
+        });
+    }
+
+    function pintarElecciones(elecciones) {
+        for (var i = 0; i < elecciones.length; i++) {
+            var eleccion = elecciones[i];
+            pintarEleccion(eleccion);
+        }
+    }
+
+    function pintarEleccion(eleccion) {
+        var activo = eleccion.activa;
+        var datos = eleccion.eleccion;
+        var id = datos.id;
+
+        var html = '<div class="home_eleccion">' +
+            '<p class="home_nombre_eleccion">' + datos.nombre + '</p>' +
+            '<p class="home_descripcion_eleccion">' + datos.descripcion + '</p>' +
+            '<p class="home_fecha_inicio_eleccion">' + moment(new Date(datos.inicioEleccion)).format('MMMM DD YYYY, h:mm:ss a') + '</p>' +
+            '<p class="home_fecha_fin_eleccion">' + moment(new Date(datos.finEleccion)).format('MMMM DD YYYY, h:mm:ss a') + '</p>' +
+            '<p>Activo: ' + (activo ? 'Sí' : 'No') + '</p>' +
+            '<button data-id="' + id + '" class="home_boton_eleccion" data-activo="' + activo + '" onClick="irAVotar(this)">Abrir</button>'
+        '</div>';
+
+        $('#home_elecciones_disponbiles').append(html);
+    }
+
+    function irAVotar(boton) {
+        if (boton.getAttribute('data-activo') == 'true') {
+            $(location).attr('href', 'votar.html');
+        } else {
+            $(location).attr('href', 'resultados_eleccion.html?idEleccion=' + boton.getAttribute('data-id'));
+        }
+    }
+</script>
 </html>
