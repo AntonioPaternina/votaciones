@@ -7,5 +7,5 @@ id,username,password,primer nombre, segundo nombre, primer apellido, segundo ape
 6,clopez,test,Clara,Eugenia,López,Obregón,cloperz@foo.bar,1950-04-12,true,"2,3"
 7,epenalosa,test,Enrique,Peñalosa,Londoño,,epenalosa@foo.bar,1954-09-30,true,"2,3"
 8,test,test,Alguien,Alguien,Alguien,Alguien,test@foo.bar,1955-06-05,true,"2,3"
-9,test2,test2,Otro,Otro,Otro,Otro,otro@foo.bar,1955-06-05,true,"2,3"
+9,otro,test2,Otro,Otro,Otro,Otro,otro@foo.bar,1955-06-05,true,"2,3"
 10,admin,admin,admin,admin,admin,admin,admin@foo.bar,1956-01-01,true,1

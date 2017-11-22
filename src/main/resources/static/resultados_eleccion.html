@@ -51,10 +51,6 @@
         }
     }
 
-    function armarNombreCompleto(candidato) {
-        return candidato.primerNombre + ' ' + candidato.segundoNombre + ' ' + candidato.primerApellido + ' ' + candidato.segundoApellido;
-    }
-
     function generarGrafico(data, titulo) {
         google.charts.load('current', {'packages': ['corechart']});
         google.charts.setOnLoadCallback(dibujarPieChart);

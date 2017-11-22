@@ -3,8 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <title>Votación para la elección</title>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/moment-with-locales.js"></script>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/utilidades.js"></script>
+    <style>
+        #votar_candidatos {
+            margin: 10px;
+        }
+
+        .votar_candidato {
+            border: 1px solid black;
+            margin: 10px;
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
-Aquí irá la info de los candidatos y se podrá votar
+<h1 id="votar_titulo"></h1>
+<h2 id="votar_descripcion"></h2>
+<div id="votar_candidatos"></div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var idEleccion = getUrlParameter("idEleccion");
+
+        actualizarTitulos(idEleccion);
+        consultarCandidatos(idEleccion, pintarCandidatos);
+    });
+
+    function actualizarTitulos(idEleccion) {
+        consultarEleccion(idEleccion, pintarTitulos);
+    }
+
+    function pintarTitulos(eleccion) {
+        $('#votar_titulo').html("Nombre: " + eleccion.nombre);
+        $('#votar_descripcion').html("Descripción: " + eleccion.descripcion);
+    }
+
+    function pintarCandidatos(candidatos) {
+        for (var i = 0; i < candidatos.length; i++) {
+            pintarCandidato(candidatos[i]);
+        }
+    }
+
+    function pintarCandidato(candidato) {
+        var divListaCandidatos = $('#votar_candidatos');
+        var html = '<div class="votar_candidato">' +
+            '<img class="votar_foto_candidato" src="' + candidato.foto + '" />' +
+            '<p class="votar_candidato_nombre">Nombre: ' + armarNombreCompleto(candidato.usuario) + '</p>' +
+            '<p class="votar_candidato_partido">Partido: ' + candidato.partido.nombre + '</p>' +
+            '<p clas="votar_candidato_biografia">' + candidato.biografia + '</p>' +
+            '<button data-id="' + candidato.id + '" onclick="votar(this)">Votar</button>' +
+            '</div>';
+        divListaCandidatos.append(html);
+    }
+
+    function consultarCandidatos(idEleccion, callback) {
+        $.ajax({
+            url: 'candidato/consultar?idEleccion=' + idEleccion,
+            method: 'GET',
+            success: function (data) {
+                callback(data);
+            },
+            error: function () {
+                alert('Ocurrió un error consultando los candidatos');
+            }
+        });
+    }
+
+    function consultarEleccion(idEleccion, callback) {
+        $.ajax({
+            url: 'eleccion/consultar-por-id?idEleccion=' + idEleccion,
+            method: 'GET',
+            success: function (eleccion) {
+                callback(eleccion);
+            },
+            error: function () {
+                alert('Ocurrió un error consultando la elección');
+            }
+        });
+    }
+
+    function votar(botonVotar) {
+        var idCandidato = botonVotar.getAttribute("data-id");
+        var idEleccion = getUrlParameter("idEleccion");
+
+        invocarServicioVotar(idEleccion, idCandidato, redirigirResultados)
+    }
+
+    function invocarServicioVotar(idEleccion, idCandidato, callback) {
+        $.ajax({
+            url: 'voto/votar?idEleccion=' + idEleccion + '&idCandidato=' + idCandidato,
+            method: 'POST',
+            success: function (voto) {
+                alert('Ha votado exitosamente');
+                callback(voto);
+            },
+            error: function () {
+                alert('Ocurrió un error invocando al servicio de votación.');
+            }
+        });
+    }
+
+    function redirigirResultados() {
+        var idEleccion = getUrlParameter("idEleccion");
+        $(location).attr('href', 'resultados_eleccion.html?idEleccion=' + idEleccion);
+    }
+</script>
 </body>
 </html>

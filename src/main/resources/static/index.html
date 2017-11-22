@@ -68,7 +68,7 @@
 
     function irAVotar(boton) {
         if (boton.getAttribute('data-activo') == 'true') {
-            $(location).attr('href', 'votar.html');
+            $(location).attr('href', 'votar.html?idEleccion=' + boton.getAttribute('data-id'));
         } else {
             $(location).attr('href', 'resultados_eleccion.html?idEleccion=' + boton.getAttribute('data-id'));
         }

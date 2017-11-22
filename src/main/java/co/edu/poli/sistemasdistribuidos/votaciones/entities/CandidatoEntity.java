@@ -26,6 +26,7 @@ public class CandidatoEntity extends BaseEntity implements Serializable {
     private String biografia;
 
     @Column(name = "FOTO")
+    @Lob
     private String foto;
 
     public UsuarioEntity getUsuario() {

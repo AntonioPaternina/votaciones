@@ -1,4 +1,4 @@
-var getUrlParameter = function getUrlParameter(sParam) {
+function getUrlParameter(sParam) {
     var sPageURL = decodeURIComponent(window.location.search.substring(1)),
         sURLVariables = sPageURL.split('&'),
         sParameterName,
@@ -12,3 +12,7 @@ var getUrlParameter = function getUrlParameter(sParam) {
         }
     }
 };
+
+function armarNombreCompleto(usuario) {
+    return usuario.primerNombre + ' ' + usuario.segundoNombre + ' ' + usuario.primerApellido + ' ' + usuario.segundoApellido;
+}
