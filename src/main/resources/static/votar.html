@@ -7,22 +7,14 @@
     <script type="text/javascript" src="js/moment-with-locales.js"></script>
     <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/utilidades.js"></script>
-    <style>
-        #votar_candidatos {
-            margin: 10px;
-        }
-
-        .votar_candidato {
-            border: 1px solid black;
-            margin: 10px;
-            padding: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/votar.css">
 </head>
 <body>
-<h1 id="votar_titulo"></h1>
-<h2 id="votar_descripcion"></h2>
-<div id="votar_candidatos"></div>
+    <section id="Content">
+        <h1 id="votar_titulo"></h1>
+        <h2 id="votar_descripcion"></h2>
+        <div id="votar_candidatos"></div>
+    </section>
 <script type="text/javascript">
     $(document).ready(function () {
         var idEleccion = getUrlParameter("idEleccion");
@@ -52,7 +44,7 @@
             '<img class="votar_foto_candidato" src="' + candidato.foto + '" />' +
             '<p class="votar_candidato_nombre">Nombre: ' + armarNombreCompleto(candidato.usuario) + '</p>' +
             '<p class="votar_candidato_partido">Partido: ' + candidato.partido.nombre + '</p>' +
-            '<p clas="votar_candidato_biografia">' + candidato.biografia + '</p>' +
+            '<p class="votar_candidato_biografia">' + candidato.biografia + '</p>' +
             '<button data-id="' + candidato.id + '" onclick="votar(this)">Votar</button>' +
             '</div>';
         divListaCandidatos.append(html);

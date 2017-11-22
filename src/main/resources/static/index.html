@@ -7,21 +7,14 @@
     <script type="text/javascript" src="js/moment-with-locales.js"></script>
     <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/utilidades.js"></script>
+    <link rel="stylesheet" href="/css/index.css">
 </head>
-<style>
-    #home_elecciones_disponbiles {
-        margin: 10px;
-    }
-
-    .home_eleccion {
-        border: 2px solid black;
-        margin: 10px;
-    }
-</style>
 <body>
-<h1>Bienvenido al Sistema de Elecciones</h1>
-<h2>Elecciones disponibles</h2>
-<div id="home_elecciones_disponbiles"></div>
+    <section id="Content">
+        <h1>Bienvenido al Sistema de Elecciones</h1>
+        <h2>Elecciones disponibles</h2>
+        <div id="home_elecciones_disponbiles"></div>
+    </section>
 </body>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -59,7 +52,7 @@
             '<p class="home_descripcion_eleccion">' + datos.descripcion + '</p>' +
             '<p class="home_fecha_inicio_eleccion">Inicio: ' + moment(new Date(datos.inicioEleccion)).format('MMMM DD YYYY, h:mm:ss a') + '</p>' +
             '<p class="home_fecha_fin_eleccion">Fin: ' + moment(new Date(datos.finEleccion)).format('MMMM DD YYYY, h:mm:ss a') + '</p>' +
-            '<p>Activo: ' + (activo ? 'Sí' : 'No') + '</p>' +
+            '<p class="home_activo">Activo: ' + (activo ? 'Sí' : 'No') + '</p>' +
             '<button data-id="' + id + '" class="home_boton_eleccion" data-activo="' + activo + '" onClick="irAVotar(this)">Abrir</button>'
         '</div>';
 
