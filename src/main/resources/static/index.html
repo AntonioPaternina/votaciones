@@ -57,8 +57,8 @@
         var html = '<div class="home_eleccion">' +
             '<p class="home_nombre_eleccion">' + datos.nombre + '</p>' +
             '<p class="home_descripcion_eleccion">' + datos.descripcion + '</p>' +
-            '<p class="home_fecha_inicio_eleccion">' + moment(new Date(datos.inicioEleccion)).format('MMMM DD YYYY, h:mm:ss a') + '</p>' +
-            '<p class="home_fecha_fin_eleccion">' + moment(new Date(datos.finEleccion)).format('MMMM DD YYYY, h:mm:ss a') + '</p>' +
+            '<p class="home_fecha_inicio_eleccion">Inicio: ' + moment(new Date(datos.inicioEleccion)).format('MMMM DD YYYY, h:mm:ss a') + '</p>' +
+            '<p class="home_fecha_fin_eleccion">Fin: ' + moment(new Date(datos.finEleccion)).format('MMMM DD YYYY, h:mm:ss a') + '</p>' +
             '<p>Activo: ' + (activo ? 'Sí' : 'No') + '</p>' +
             '<button data-id="' + id + '" class="home_boton_eleccion" data-activo="' + activo + '" onClick="irAVotar(this)">Abrir</button>'
         '</div>';
