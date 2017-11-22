@@ -38,7 +38,8 @@ body::after {
 #home_elecciones_disponbiles {
     margin: auto;
     width: 100%;
-    height: 500px;
+    /*height: 500px;*/
+    overflow: hidden;
 }
 
 .home_eleccion {
